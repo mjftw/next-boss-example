@@ -1,5 +1,5 @@
 import { WorkHandler } from "pg-boss";
-import { isMainThread, threadId } from "worker_threads";
+import { getBoss } from "~/utils/pgboss/boss";
 
 interface Job<Args, Queue extends string> {
   queue: Queue;
@@ -18,10 +18,6 @@ function jobHandler<Queue extends keyof JobArgs>(
 }
 
 const helloJob = jobHandler("say-hello", async ({ data: { name } }) => {
-  console.log(
-    `Handling job ${"say-hello"}. isMainThread: ${isMainThread}, thread ID:${threadId}`,
-  );
-
   console.log(`Hello, ${name}!`);
 });
 
@@ -29,11 +25,9 @@ async function enqueueJob<Queue extends keyof JobArgs>(
   queue: Queue,
   args: JobArgs[Queue],
 ) {
-  console.log(
-    `Queueing job ${queue}. isMainThread: ${isMainThread}, thread ID:${threadId}`,
-  );
+  console.log(`Queueing job "${queue}"`);
 
-  const { boss } = await import("~/utils/pgboss/boss");
+  const boss = await getBoss();
 
   await boss.send(queue, args);
 }

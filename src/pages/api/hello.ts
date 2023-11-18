@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { isMainThread, threadId } from "worker_threads";
-import { boss } from "~/utils/pgboss/boss";
 import { enqueueJob } from "~/utils/pgboss/jobs";
 
 type ResponseData = {
@@ -15,6 +14,7 @@ export default async function handler(
     `In API handler. isMainThread: ${isMainThread}, thread ID:${threadId}`,
   );
 
+  // Queue a job to happen in the future
   await enqueueJob("say-hello", { name: "World" });
 
   return res.status(200).json({ message: "Hello, World!" });
