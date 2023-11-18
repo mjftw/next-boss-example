@@ -10,10 +10,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData>,
 ) {
-  console.log(
-    `In API handler. isMainThread: ${isMainThread}, thread ID:${threadId}`,
-  );
-
   // Queue a job to happen in the future
   await enqueueJob("say-hello", { name: "computer" });
 
