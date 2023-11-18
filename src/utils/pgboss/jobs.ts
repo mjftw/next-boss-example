@@ -1,5 +1,6 @@
-import { WorkHandler } from "pg-boss";
+import PgBoss, { WorkHandler } from "pg-boss";
 import { getBoss } from "~/utils/pgboss/boss";
+import { db } from "~/server/db";
 
 /** All of the different jobs available, and the type of the arguments those
  * jobs take.
@@ -8,6 +9,7 @@ import { getBoss } from "~/utils/pgboss/boss";
 type JobArgs = {
   "say-hello": { name: string };
   "say-the-time": {};
+  "create-post": { title: string };
 };
 
 /** Definitions of each job available */
@@ -19,6 +21,10 @@ const jobHandlers: {
   },
   "say-the-time": async () => {
     console.log(`The time is ${new Date()}!`);
+  },
+  "create-post": async ({ data: { title } }) => {
+    console.log(`Adding new post to database`);
+    await db.post.create({ data: { name: title } });
   },
 };
 
@@ -33,4 +39,12 @@ async function enqueueJob<Queue extends keyof JobArgs>(
   await boss.send(queue, args ?? {});
 }
 
-export { jobHandlers, enqueueJob };
+async function registerJobHandler<K extends keyof JobArgs>(
+  boss: PgBoss,
+  queue: K,
+  handler: WorkHandler<JobArgs[K]>,
+): Promise<string> {
+  return boss.work(queue, handler);
+}
+
+export { jobHandlers, enqueueJob, registerJobHandler, type JobArgs };

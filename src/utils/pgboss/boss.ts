@@ -1,7 +1,7 @@
 // setupPgBoss.js
 
-import PgBoss from "pg-boss";
-import { jobHandlers } from "~/utils/pgboss/jobs";
+import PgBoss, { WorkHandler } from "pg-boss";
+import { JobArgs, jobHandlers, registerJobHandler } from "~/utils/pgboss/jobs";
 
 type BossState =
   | {
@@ -37,7 +37,11 @@ async function getBoss(): Promise<PgBoss> {
 
   await Promise.all(
     Object.entries(jobHandlers).map(([queue, handler]) =>
-      boss.work(queue, handler),
+      registerJobHandler(
+        boss,
+        queue as keyof JobArgs,
+        handler as WorkHandler<any>,
+      ),
     ),
   );
 
