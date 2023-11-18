@@ -15,7 +15,7 @@ export default async function handler(
   );
 
   // Queue a job to happen in the future
-  await enqueueJob("say-hello", { name: "computer" });
+  await enqueueJob("say-the-time");
 
   return res.status(200).json({ message: "Job queued" });
 }
