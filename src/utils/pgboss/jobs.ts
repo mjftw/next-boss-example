@@ -1,11 +1,6 @@
 import { WorkHandler } from "pg-boss";
 import { getBoss } from "~/utils/pgboss/boss";
 
-interface Job<Args, Queue extends string> {
-  queue: Queue;
-  handler: WorkHandler<Args>;
-}
-
 /** All of the different jobs available, and the type of the arguments those
  * jobs take.
  * If the job takes no arguments, an empty object {} is used.
