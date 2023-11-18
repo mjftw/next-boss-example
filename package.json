@@ -6,7 +6,10 @@
     "build": "next build",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
-    "dev": "next dev",
+    "db:up": "docker compose up -d --wait postgres",
+    "db:down": "docker compose down",
+    "db:reset": "docker compose down --volumes",
+    "dev": "npm run db:up && prisma db push && next dev",
     "postinstall": "prisma generate",
     "lint": "next lint",
     "start": "next start"
