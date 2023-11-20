@@ -1,28 +1,33 @@
-# Create T3 App
+# Next Boss Example
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+This project demonstrates the integration of pg-boss with a NextJS application, showcasing a robust method for queueing and handling asynchronous jobs.
 
-## What's next? How do I make an app with this?
+This is based of a standard T3 stack application, create with [Create T3 App](https://create.t3.gg/)
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+## Overview
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+pg-boss is employed to manage job queues within the NextJS application. It allows for the scheduling and processing of jobs asynchronously, ensuring efficient handling of background tasks.
+Jobs are queued as a result of NextJS client calls, and serviced outside the usual NextJS server model using pg-boss async handlers.
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+If you've used [Oban](https://github.com/sorentwo/oban) before, it's a bit like that!
 
-## Learn More
+## Features
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+- Job queuing with pg-boss in a NextJS application
+- Asynchronous job processing
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+## API Endpoints
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+The project includes three API endpoints to demonstrate the queuing of jobs:
 
-## How do I deploy this?
+1. `curl -X GET http://localhost:3000/api/hello`
+2. `curl -X GET http://localhost:3000/api/time`
+3. `curl -X GET http://localhost:3000/api/post`
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+Running these curl commands with the server running (via `yarn dev`), you should see some server console output about jobs being queued and handled.
+
+## How pg-boss Works
+
+pg-boss operates by creating and managing job queues in PostgreSQL. It leverages PostgreSQL's native features to ensure reliable and scalable job processing. Jobs are added to a queue and processed as per the configured schedule or triggers.
+
+More info about pg-boss on their [official documentation](https://github.com/timgit/pg-boss/)
